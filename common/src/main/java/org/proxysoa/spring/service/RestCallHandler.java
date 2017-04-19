@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 /**
  * Wraps Controller and keeps all the remote  REST calls related logic,
- * marshall paramters, remote calls, unmarshall results.
+ * marshall parameters, remote calls, unmarshall results.
  * On construct creates map of invocation info for each method of Controller.
  * On invoke
  * 1. gets the invocation info from the map,
@@ -63,7 +63,7 @@ public class RestCallHandler implements InvocationHandler {
         Set<Annotation> annotations = ReflectionUtils.getAllAnnotations(controllerClass);
         for (Annotation a : annotations) {
             if (a instanceof RequestMapping) {
-                return ((RequestMapping) a).value()[0]; //TODo what if it has more than one value
+                return ((RequestMapping) a).value()[0]; //TODO what if it has more than one value?
             }
         }
         return "";
@@ -82,7 +82,7 @@ public class RestCallHandler implements InvocationHandler {
         List<ApiImplicitParam> variables = new ArrayList<>();
         for (Annotation a : annotations) {
             if (a instanceof RequestMapping) {
-                methodRequestMapping.append(((RequestMapping) a).value()[0]); //TODO what if it has more than one value
+                methodRequestMapping.append(((RequestMapping) a).value()[0]); //TODO what if it has more than one ?
                 httpMethod = HttpMethod.valueOf(((RequestMapping) a).method()[0].name());
             } else if (a instanceof ApiImplicitParams) {
                 ApiImplicitParams params = (ApiImplicitParams) a;
@@ -105,9 +105,11 @@ public class RestCallHandler implements InvocationHandler {
      * @throws Throwable throws invocation exceptions
      */
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        InvocationInfo info = methodInvocationMap.get(method.getDeclaringClass().getCanonicalName() + ":" + method.getName());
+        InvocationInfo info = methodInvocationMap.get(method.getDeclaringClass().getCanonicalName() +
+                ":" + method.getName());
         if (info == null) {
-            throw new SOAControllerInvocationException("Cannot find invocation info for the method " + method.getName());
+            throw new SOAControllerInvocationException("Cannot find invocation info for the method " +
+                    method.getName());
         }
 
         String url = info.serviceUrl + info.requestMapping;
@@ -306,7 +308,8 @@ public class RestCallHandler implements InvocationHandler {
          * @param httpMethod http method
          * @param parameters declared parameters
          */
-        public InvocationInfo(String serviceUrl, String requestMapping, HttpMethod httpMethod, List<ApiImplicitParam> parameters) {
+        InvocationInfo(String serviceUrl, String requestMapping, HttpMethod httpMethod,
+                       List<ApiImplicitParam> parameters) {
             this.serviceUrl = serviceUrl;
             this.requestMapping = requestMapping;
             this.httpMethod = httpMethod;
