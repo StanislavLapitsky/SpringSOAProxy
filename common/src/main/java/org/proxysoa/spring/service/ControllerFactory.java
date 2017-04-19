@@ -2,6 +2,7 @@ package org.proxysoa.spring.service;
 
 import org.proxysoa.spring.exception.SOAControllerCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +36,8 @@ public class ControllerFactory {
     private Map<String, Object> controllersMap = new HashMap<>();
 
     //shows whether we need to create proxy or can use local bean (if true proxy is created anyway)
-    private boolean enforceProxyCreation = false;
+    @Value("${SOA.ControllerFactory.enforceProxyCreation:false}")
+    private boolean enforceProxyCreation;
 
     /**
      * Gets local controller bean (if exists) or creates proxy for the controller remote calls

@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.proxysoa.spring</groupId>
-    <artifactId>user-service</artifactId>
+    <artifactId>soa-integration-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>User service</name>
-    <description>Common classes for spring proxy</description>
+    <name>soa-integration</name>
+    <description>Tests how all the services work together</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -45,10 +45,22 @@
             <version>2.4.0</version>
         </dependency>
 
+        <!--internal projects-->
         <dependency>
             <groupId>org.proxysoa.spring</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.proxysoa.spring</groupId>
+            <artifactId>user-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.proxysoa.spring</groupId>
+            <artifactId>project-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -77,6 +89,10 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.springframework.boot</groupId>-->
+                <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 
