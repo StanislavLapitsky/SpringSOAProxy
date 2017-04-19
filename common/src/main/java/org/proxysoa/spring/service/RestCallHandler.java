@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
  * 3. builds proper Http call parameters
  * 4. calls remote REST service
  * 5. deserializes results to output
+ *
  * @author stanislav.lapitsky created 4/14/2017.
  */
 public class RestCallHandler implements InvocationHandler {
@@ -44,9 +45,11 @@ public class RestCallHandler implements InvocationHandler {
     /**
      * Constructs invocation info for specified controller interface.
      * Iterates methods storing call info
+     *
      * @param controllerClass controller to be called remotely
-     * @param controllerUrl URL of the remote REST web service to be called
+     * @param controllerUrl   URL of the remote REST web service to be called
      */
+    @SuppressWarnings("unchecked")
     public RestCallHandler(Class<?> controllerClass, String controllerUrl) {
         String classMapping = getClassRequestMapping(controllerClass);
         for (Method m : ReflectionUtils.getAllMethods(controllerClass)) {
@@ -56,9 +59,11 @@ public class RestCallHandler implements InvocationHandler {
 
     /**
      * Gets calss RequestMapping. Used to build proper URL for remote call
+     *
      * @param controllerClass controller to be called remotely
      * @return RequestMapping or empty string if class mapping is not defined
      */
+    @SuppressWarnings("unchecked")
     String getClassRequestMapping(Class<?> controllerClass) {
         Set<Annotation> annotations = ReflectionUtils.getAllAnnotations(controllerClass);
         for (Annotation a : annotations) {
@@ -71,10 +76,12 @@ public class RestCallHandler implements InvocationHandler {
 
     /**
      * Fills and stores method's invocation info (mapping, http method, url, declared parameters)
-     * @param m method to be invoked remotely
-     * @param classMapping mapping of class (used to build full mapping for the method)
+     *
+     * @param m             method to be invoked remotely
+     * @param classMapping  mapping of class (used to build full mapping for the method)
      * @param controllerUrl remote webservice URL
      */
+    @SuppressWarnings("unchecked")
     private void storeMethodInfo(Method m, String classMapping, String controllerUrl) {
         StringBuilder methodRequestMapping = new StringBuilder(classMapping);
         HttpMethod httpMethod = HttpMethod.GET;
@@ -98,9 +105,10 @@ public class RestCallHandler implements InvocationHandler {
 
     /**
      * Remotely invokes specified method
-     * @param proxy proxy class instance (method owner)
+     *
+     * @param proxy  proxy class instance (method owner)
      * @param method method to be called remotely
-     * @param args method parameters' values
+     * @param args   method parameters' values
      * @return remote call results
      * @throws Throwable throws invocation exceptions
      */
@@ -139,8 +147,9 @@ public class RestCallHandler implements InvocationHandler {
     /**
      * Create http entity for remote call.
      * Adds headers and call parameters
-     * @param args method arguments' values
-     * @param info invocation info
+     *
+     * @param args    method arguments' values
+     * @param info    invocation info
      * @param builder uri builder
      * @return http entity for RestTemplate call
      */
@@ -159,6 +168,7 @@ public class RestCallHandler implements InvocationHandler {
 
     /**
      * Converts Objects values to String values. Used to build URL params for GET calls
+     *
      * @param values call parameters map (name/values)
      * @return the same map but with string values
      */
@@ -174,7 +184,8 @@ public class RestCallHandler implements InvocationHandler {
 
     /**
      * Creates BODY for POST/PUT etc calls
-     * @param ii invocation info
+     *
+     * @param ii   invocation info
      * @param args call arguments
      * @return body for REST call
      */
@@ -191,7 +202,8 @@ public class RestCallHandler implements InvocationHandler {
      * If params and values amount is the same we just pass parameters.
      * if the amounts are different we go through POJO (we suppose POJO values are used)
      * and fill map from the POJO methods
-     * @param ii invocation info
+     *
+     * @param ii   invocation info
      * @param args call values
      * @return param/value map
      */
@@ -233,6 +245,7 @@ public class RestCallHandler implements InvocationHandler {
     /**
      * Gets all pojo fields (field names are param names in the map)
      * and place for each field the field's value
+     *
      * @param thingy POJO
      * @return param/value map
      */
@@ -258,6 +271,7 @@ public class RestCallHandler implements InvocationHandler {
 
     /**
      * Sum param/value maps in one map for all call values
+     *
      * @param args call values
      * @return param/value map
      */
@@ -271,6 +285,7 @@ public class RestCallHandler implements InvocationHandler {
 
     /**
      * Converts a value to json
+     *
      * @param obj value
      * @return JSON string
      */
@@ -303,10 +318,11 @@ public class RestCallHandler implements InvocationHandler {
 
         /**
          * Constructs invocation info
-         * @param serviceUrl remote URL
+         *
+         * @param serviceUrl     remote URL
          * @param requestMapping method request mapping
-         * @param httpMethod http method
-         * @param parameters declared parameters
+         * @param httpMethod     http method
+         * @param parameters     declared parameters
          */
         InvocationInfo(String serviceUrl, String requestMapping, HttpMethod httpMethod,
                        List<ApiImplicitParam> parameters) {

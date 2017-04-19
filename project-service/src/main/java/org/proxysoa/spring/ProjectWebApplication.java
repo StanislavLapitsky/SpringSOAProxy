@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Projects web application
+ *
  * @author stanislav.lapitsky created 4/14/2017.
  */
 

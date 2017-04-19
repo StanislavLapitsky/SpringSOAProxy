@@ -6,22 +6,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.proxysoa.spring.controller.ParametersConverterTestController;
-import org.proxysoa.spring.controller.ProjectController;
-import org.proxysoa.spring.controller.UserController;
 import org.proxysoa.spring.dto.PojoDTO;
-import org.proxysoa.spring.dto.ProjectDTO;
-import org.proxysoa.spring.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.lang.reflect.Proxy;
-import java.util.List;
 
 /**
  * @author stanislav.lapitsky created 4/14/2017.

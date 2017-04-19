@@ -15,13 +15,13 @@ import java.util.Map;
  * controller the bean is returned.
  * If there is no requested bean locally a Proxy controller is created. The proxy can call controller methods
  * remotely (via Proxy -> RestTemplate call)
- * @link org.proxysoa.spring.service.RestCallHandler
- *
- * ControllerURLResolver is used to get URL for controller's remote call.
- *
- * When enforceProxyCreation=true proxy is created no matter whether local bean exists.
  *
  * @author stanislav.lapitsky created 4/14/2017.
+ * @link org.proxysoa.spring.service.RestCallHandler
+ * <p>
+ * ControllerURLResolver is used to get URL for controller's remote call.
+ * <p>
+ * When enforceProxyCreation=true proxy is created no matter whether local bean exists.
  */
 @Component
 public class ControllerFactory {
@@ -39,8 +39,9 @@ public class ControllerFactory {
 
     /**
      * Gets local controller bean (if exists) or creates proxy for the controller remote calls
+     *
      * @param controllerInterface controller to be called (wrapped to proxy if necessary)
-     * @param <T> class
+     * @param <T>                 class
      * @return local controller instance of Proxy for remote call
      */
     public <T> T getController(Class<T> controllerInterface) {
@@ -62,9 +63,10 @@ public class ControllerFactory {
 
     /**
      * Checks proxy cache. If enpty creates a new Proxy, stores to the cache and return the proxy instance)
+     *
      * @param controllerInterface controller to be called (wrapped to proxy if necessary)
-     * @param <T> class
-     * @param controllerUrl url for remote calls
+     * @param <T>                 class
+     * @param controllerUrl       url for remote calls
      * @return proxy for the controller
      */
     @SuppressWarnings("unchecked")

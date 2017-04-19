@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.proxysoa.spring.dto.SimplePage;
 import org.proxysoa.spring.dto.UserDTO;
-import org.proxysoa.spring.service.DeserializeParameterizedTypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
@@ -15,11 +14,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.Assert;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.net.URL;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -51,7 +45,8 @@ public class UserControllerImplTest {
                 base + contextPath + "/users",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<SimplePage<UserDTO>>() {});
+                new ParameterizedTypeReference<SimplePage<UserDTO>>() {
+                });
 
         assertThat(response.getBody().getContent().size(), equalTo(10));
     }

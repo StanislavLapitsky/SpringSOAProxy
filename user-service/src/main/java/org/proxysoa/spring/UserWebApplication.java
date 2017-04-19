@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Users web application
+ *
  * @author stanislav.lapitsky created 4/14/2017.
  */
 @ComponentScan(basePackages = "org.proxysoa.spring")

@@ -2,6 +2,7 @@ package org.proxysoa.spring.dto;
 
 /**
  * Represents simple page request - offset, page size (rows on page) and sort.
+ *
  * @author stanislav.lapitsky created 4/14/2017.
  */
 public class SimplePageRequest {
@@ -19,9 +20,10 @@ public class SimplePageRequest {
 
     /**
      * Constructor with desired params
-     * @param offset offset
+     *
+     * @param offset   offset
      * @param pageSize page size (rows on page)
-     * @param sort sorting info
+     * @param sort     sorting info
      */
     public SimplePageRequest(int offset, int pageSize, String sort) {
         this.offset = offset;

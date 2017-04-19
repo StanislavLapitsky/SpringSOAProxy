@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Represents simplest URL resolver - Map based.
+ *
  * @author stanislav.lapitsky created 4/18/2017.
  */
 public class MapControllerUrlResolver implements ControllerURLResolver {
@@ -18,6 +19,7 @@ public class MapControllerUrlResolver implements ControllerURLResolver {
 
     /**
      * Builds a new instance with predefined map
+     *
      * @param urlsMap map for the Class->URLs
      */
     public MapControllerUrlResolver(Map<Class<?>, String> urlsMap) {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * The controller is a contract for UserService (implemented in the User Service app).
  * It is used to be called locally or remotely. For remote call a Proxy is created for the Controller.
  * Swagger annotations are used to manage remote calls (via proxy).
+ *
  * @author stanislav.lapitsky created 4/13/2017.
  */
 @Api(value = ApiConst.MAPPING_USERS, description = "Users API")
@@ -22,6 +23,7 @@ public interface UserController {
     /**
      * The method go get chunk of users (page). We pass page request which offset, pageSize and sort
      * and get selected users
+     *
      * @param pageRequest page request data (has offset, pageSize and sort)
      * @return page representation (sublist of existing users)
      */

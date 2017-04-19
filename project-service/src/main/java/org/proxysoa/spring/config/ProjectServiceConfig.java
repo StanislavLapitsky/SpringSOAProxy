@@ -14,6 +14,7 @@ import java.util.Map;
 /**
  * Simplest URL resolver for remote calls for each controller.
  * Could be replaced with .properties based approach
+ *
  * @author stanislav.lapitsky created 4/18/2017.
  */
 @Configuration

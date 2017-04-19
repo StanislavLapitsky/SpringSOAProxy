@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Implements common's UserController contract
+ *
  * @author stanislav.lapitsky created 4/13/2017.
  */
 @RestController

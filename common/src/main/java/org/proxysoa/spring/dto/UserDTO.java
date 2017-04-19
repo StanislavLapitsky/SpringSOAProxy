@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 /**
  * Represents user information
+ *
  * @author stanislav.lapitsky created 4/13/2017.
  */
 public class UserDTO {
@@ -25,6 +26,7 @@ public class UserDTO {
 
     /**
      * Constructor with consumer to simplify creation
+     *
      * @param builder consumer
      */
     public UserDTO(Consumer<UserDTO> builder) {

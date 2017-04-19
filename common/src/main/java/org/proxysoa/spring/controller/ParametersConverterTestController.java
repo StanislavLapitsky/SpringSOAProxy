@@ -21,7 +21,8 @@ public interface ParametersConverterTestController {
     /**
      * We declare ApiImplicitParams and the same method parameters.
      * During calling the method all the args are converted to appropriate api parameters.
-     * @param id long parameter
+     *
+     * @param id   long parameter
      * @param name name parameter
      * @return just sum of name + id
      */
@@ -40,7 +41,8 @@ public interface ParametersConverterTestController {
      * HOST:PORT/CONTEXT?param1=value1&param2=value2...
      * we just don't know how the get proper parameter names/
      * When the method is called remotely null is sent for each parameter.
-     * @param id long parameter
+     *
+     * @param id   long parameter
      * @param name name parameter
      * @return just sum of name + id
      */
@@ -52,6 +54,7 @@ public interface ParametersConverterTestController {
     /**
      * We declare ApiImplicitParams but the parameters are converted to POJO fields. We use the POJO fields' names
      * to pass the values
+     *
      * @param dto POJO with field names corresponding the used request parameters
      * @return just sum of name + id
      */
@@ -67,6 +70,7 @@ public interface ParametersConverterTestController {
     /**
      * We does not declare ApiImplicitParams but the parameters are POJO's fields. We use the POJO fields' names
      * to pass the values
+     *
      * @param dto POJO with field names corresponding the used request parameters
      * @return just sum of name + id
      */
@@ -78,7 +82,8 @@ public interface ParametersConverterTestController {
     /**
      * We declare ApiImplicitParams and the same method parameters.
      * During calling the method all the args are converted to appropriate api parameters.
-     * @param id long parameter
+     *
+     * @param id   long parameter
      * @param name name parameter
      * @return just sum of name + id
      */
@@ -97,7 +102,8 @@ public interface ParametersConverterTestController {
      * HOST:PORT/CONTEXT + BODY {param1=value1&param2=value2...}
      * we just don't know how the get proper parameter names/
      * When the method is called remotely null is sent for each parameter.
-     * @param id long parameter
+     *
+     * @param id   long parameter
      * @param name name parameter
      * @return just sum of name + id
      */
@@ -109,6 +115,7 @@ public interface ParametersConverterTestController {
     /**
      * We declare ApiImplicitParams but the parameters are converted to POJO fields. We use the POJO fields' names
      * to pass the values
+     *
      * @param dto POJO with field names corresponding the used request parameters
      * @return just sum of name + id
      */
@@ -124,6 +131,7 @@ public interface ParametersConverterTestController {
     /**
      * We does not declare ApiImplicitParams but the parameters are POJO's fields. We use the POJO fields' names
      * to pass the values
+     *
      * @param dto POJO with field names corresponding the used request parameters
      * @return just sum of name + id
      */

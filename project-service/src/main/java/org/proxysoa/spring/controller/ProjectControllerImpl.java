@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Implements common's ProjectController contract
+ *
  * @author stanislav.lapitsky created 4/13/2017.
  */
 @RestController

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * A dummy implementation of ParametersConverterTestController
  * Used for tests passing/resolving REST call parameters
+ *
  * @author stanislav.lapitsky created 4/18/2017.
  */
 @RestController

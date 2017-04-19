@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @author stanislav.lapitsky created 4/18/2017.
  */
 public class ControllerFactoryTest {
-    private ControllerFactory controllerFactory =new ControllerFactory();
+    private ControllerFactory controllerFactory = new ControllerFactory();
 
     @Before
     public void before() {
@@ -30,6 +30,7 @@ public class ControllerFactoryTest {
             throw new RuntimeException(e);
         }
     }
+
     @Test
     public void getProxiedController() {
         UserController uc = controllerFactory.getController(UserController.class);

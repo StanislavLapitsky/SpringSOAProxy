@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 /**
  * Represents project information
+ *
  * @author stanislav.lapitsky created 4/13/2017.
  */
 public class ProjectDTO {
@@ -22,6 +23,7 @@ public class ProjectDTO {
 
     /**
      * Constructor with consumer to simplify creation
+     *
      * @param builder consumer
      */
     public ProjectDTO(Consumer<ProjectDTO> builder) {
