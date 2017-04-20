@@ -64,6 +64,12 @@
             <artifactId>spring-test</artifactId>
             <version>2.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.proxysoa.spring</groupId>
+            <artifactId>core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
