@@ -7,6 +7,7 @@ import org.proxysoa.spring.service.ControllerURLResolver;
 import org.proxysoa.spring.service.MapControllerUrlResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,14 +19,7 @@ import java.util.Map;
  * @author stanislav.lapitsky created 4/18/2017.
  */
 @Configuration
+@PropertySource("classpath:soa-services-urls.properties")
 public class ProjectServiceConfig {
 
-    @Bean
-    public ControllerURLResolver controllerURLResolver() {
-        Map<Class<?>, String> urlsMap = new HashMap<>();
-        urlsMap.put(UserController.class, "http://localhost:8081/UserService/");
-        urlsMap.put(ProjectController.class, "http://localhost:8082/ProjectService/");
-        urlsMap.put(ParametersConverterTestController.class, "http://localhost:8082/ProjectService/");
-        return new MapControllerUrlResolver(urlsMap);
-    }
 }
