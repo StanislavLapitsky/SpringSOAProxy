@@ -70,7 +70,7 @@ public class ParametersPassingIntegrationTest {
 
         res = tc.processPrimitivesNoAPIParams(id, name);
         Assert.assertNotNull(res);
-        Assert.assertEquals("nullnull", res);
+        Assert.assertEquals(expectedResult, res);
 
         res = tc.processPOJOWithAPIParams(dto);
         Assert.assertNotNull(res);
@@ -100,7 +100,7 @@ public class ParametersPassingIntegrationTest {
 
         res = tc.processPrimitivesNoAPIParamsPost(id, name);
         Assert.assertNotNull(res);
-        Assert.assertEquals("nullnull", res);
+        Assert.assertEquals(expectedResult, res);
 
         res = tc.processPOJOWithAPIParamsPost(dto);
         Assert.assertNotNull(res);

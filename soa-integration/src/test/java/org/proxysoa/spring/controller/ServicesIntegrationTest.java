@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * We run 2 independent web services (for users and for projects) and call users service
  * which internally calls projects service
+ *
  * @author stanislav.lapitsky created 4/14/2017.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -52,7 +53,7 @@ public class ServicesIntegrationTest {
         List<UserDTO> users = response.getBody().getContent();
         assertEquals(10, users.size());
         assertNotNull(users.get(0).getProjects());
-        assertEquals(1,users.get(0).getProjects().size());
+        assertEquals(1, users.get(0).getProjects().size());
 
     }
 }

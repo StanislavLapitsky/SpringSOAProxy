@@ -2,8 +2,6 @@ package org.proxysoa.spring.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import org.proxysoa.spring.exception.SOAControllerInvocationException;
 import org.reflections.ReflectionUtils;
 import org.springframework.http.*;
@@ -12,6 +10,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,6 +22,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
+
+//import io.swagger.annotations.ApiImplicitParam;
+//import io.swagger.annotations.ApiImplicitParams;
 
 /**
  * Wraps Controller and keeps all the remote  REST calls related logic,
@@ -86,21 +88,29 @@ public class RestCallHandler implements InvocationHandler {
         StringBuilder methodRequestMapping = new StringBuilder(classMapping);
         HttpMethod httpMethod = HttpMethod.GET;
         Set<Annotation> annotations = ReflectionUtils.getAllAnnotations(m);
-        List<ApiImplicitParam> variables = new ArrayList<>();
+        List<RequestParam> variables = getRequestParams(m);
         for (Annotation a : annotations) {
             if (a instanceof RequestMapping) {
                 methodRequestMapping.append(((RequestMapping) a).value()[0]); //TODO what if it has more than one ?
                 httpMethod = HttpMethod.valueOf(((RequestMapping) a).method()[0].name());
-            } else if (a instanceof ApiImplicitParams) {
-                ApiImplicitParams params = (ApiImplicitParams) a;
-                Collections.addAll(variables, params.value());
-            } else if (a instanceof ApiImplicitParam) {
-                variables.add((ApiImplicitParam) a);
             }
         }
 
         InvocationInfo info = new InvocationInfo(controllerUrl, methodRequestMapping.toString(), httpMethod, variables);
         methodInvocationMap.put(m.getDeclaringClass().getCanonicalName() + ":" + m.getName(), info);
+    }
+
+    private List<RequestParam> getRequestParams(Method m) {
+        List<RequestParam> params = new ArrayList<>();
+        for (Annotation[] paramAnnotations : m.getParameterAnnotations()) {
+            for (Annotation a : paramAnnotations) {
+                if (a instanceof RequestParam) {
+                    params.add((RequestParam) a);
+                }
+            }
+        }
+
+        return params;
     }
 
     /**
@@ -214,7 +224,7 @@ public class RestCallHandler implements InvocationHandler {
             for (int i = 0; i < ii.parameters.size(); i++) {
                 Object value = args[i];
                 if (value != null) {
-                    variables.put(ii.parameters.get(i).name(), Collections.singletonList(value));
+                    variables.put(ii.parameters.get(i).value(), Collections.singletonList(value));
                 } else if (ii.parameters.get(i).required()) {
                     throw new SOAControllerInvocationException("Cannot resolve value of required parameter " +
                             ii.parameters.get(i).name());
@@ -227,7 +237,7 @@ public class RestCallHandler implements InvocationHandler {
         Map<String, Object> fullMap = getAllArgsMap(args);
         if (ii.parameters.size() > 0) {
             //send declared parameters only
-            for (ApiImplicitParam param : ii.parameters) {
+            for (RequestParam param : ii.parameters) {
                 Object value = fullMap.get(param.name());
                 if (value != null) {
                     variables.put(param.name(), Collections.singletonList(convertToJSON(value)));
@@ -314,7 +324,7 @@ public class RestCallHandler implements InvocationHandler {
         // remote service URL
         final String serviceUrl;
         // api params declared for the method in controller
-        final List<ApiImplicitParam> parameters;
+        final List<RequestParam> parameters;
 
         /**
          * Constructs invocation info
@@ -325,11 +335,12 @@ public class RestCallHandler implements InvocationHandler {
          * @param parameters     declared parameters
          */
         InvocationInfo(String serviceUrl, String requestMapping, HttpMethod httpMethod,
-                       List<ApiImplicitParam> parameters) {
+                       List<RequestParam> parameters) {
             this.serviceUrl = serviceUrl;
             this.requestMapping = requestMapping;
             this.httpMethod = httpMethod;
             this.parameters = parameters;
         }
     }
+
 }

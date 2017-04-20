@@ -16,6 +16,7 @@ import java.util.List;
  * The class is used for testing.
  * We run 2 independent web services (for users and for projects) and call users service
  * which internally calls projects service
+ *
  * @author stanislav.lapitsky created 4/14/2017.
  */
 public class ServicesIntegrationMainApp {
