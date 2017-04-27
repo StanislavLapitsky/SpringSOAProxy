@@ -53,4 +53,14 @@ public class ProjectDTO {
     public void setOwner(UserDTO owner) {
         this.owner = owner;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ProjectDTO{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", owner=").append(owner);
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -1,7 +1,5 @@
-package org.proxysoa.spring.controller;
+package org.proxysoa.spring;
 
-import org.proxysoa.spring.ProjectWebApplication;
-import org.proxysoa.spring.UserWebApplication;
 import org.proxysoa.spring.dto.SimplePage;
 import org.proxysoa.spring.dto.UserDTO;
 import org.springframework.boot.builder.SpringApplicationBuilder;

@@ -64,4 +64,15 @@ public class UserDTO {
     public void setProjects(List<ProjectDTO> projects) {
         this.projects = projects;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("UserDTO{");
+        sb.append("id=").append(id);
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", projects=").append(projects);
+        sb.append('}');
+        return sb.toString();
+    }
 }

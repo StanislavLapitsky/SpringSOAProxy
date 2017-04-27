@@ -39,6 +39,11 @@
             <version>1.1.0.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.proxysoa.spring</groupId>
+            <artifactId>core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

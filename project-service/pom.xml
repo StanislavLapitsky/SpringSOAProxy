@@ -45,6 +45,24 @@
             <version>2.4.0</version>
         </dependency>
 
+        <!--for class scan-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.22.0-CR1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.10</version>
+        </dependency>
+
+        <!--interlnal libs-->
         <dependency>
             <groupId>org.proxysoa.spring</groupId>
             <artifactId>core</artifactId>

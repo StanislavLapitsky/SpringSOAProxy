@@ -2,6 +2,7 @@ package org.proxysoa.spring.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.proxysoa.spring.annotation.Proxyable;
 import org.proxysoa.spring.dto.SimplePage;
 import org.proxysoa.spring.dto.SimplePageRequest;
 import org.proxysoa.spring.dto.UserDTO;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author stanislav.lapitsky created 4/13/2017.
  */
 @Api(value = ApiConst.MAPPING_USERS, description = "Users API")
+@Proxyable
 public interface UserController {
 
     /**

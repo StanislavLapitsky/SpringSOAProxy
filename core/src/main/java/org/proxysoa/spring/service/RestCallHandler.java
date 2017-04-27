@@ -261,7 +261,7 @@ public class RestCallHandler implements InvocationHandler {
      */
     private Map<String, Object> getNonNullProperties(final Object thingy) {
         final Map<String, Object> nonNullProperties = new HashMap<>();
-        if (!ClassUtils.isPrimitiveOrWrapper(thingy.getClass())) {
+        if (thingy != null && !ClassUtils.isPrimitiveOrWrapper(thingy.getClass())) {
             try {
                 final BeanInfo beanInfo = Introspector.getBeanInfo(thingy.getClass());
                 for (final PropertyDescriptor descriptor : beanInfo.getPropertyDescriptors()) {

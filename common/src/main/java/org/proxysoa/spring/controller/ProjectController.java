@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.proxysoa.spring.annotation.Proxyable;
 import org.proxysoa.spring.dto.ProjectDTO;
 import org.proxysoa.spring.dto.SimplePage;
 import org.proxysoa.spring.dto.SimplePageRequest;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author stanislav.lapitsky created 4/13/2017.
  */
 @Api(value = ApiConst.MAPPING_PROJECTS, description = "Project API")
+@Proxyable
 public interface ProjectController {
 
     /**
