@@ -11,7 +11,7 @@ calling e.g. Spring's RestTemplate. The calls implementing could be really time 
 The SpringSOAProxy hides the calling logic and allows to work with pure java interfaces 
 (fixed contract).
 
-###Parts and components
+### Parts and components
 Here you can find the modules:
 * core - all the main logic classes are there.
 * common - contract declaration, interfaces and DTO to define simplest SOA application.
