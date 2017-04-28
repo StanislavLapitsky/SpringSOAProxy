@@ -47,6 +47,7 @@ public class ControllerFactory {
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
+
     /**
      * Gets local controller bean (if exists) or creates proxy for the controller remote calls
      *

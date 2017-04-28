@@ -5,6 +5,7 @@ import org.proxysoa.spring.annotation.ProxyableScan;
 import org.proxysoa.spring.exception.SOAControllerCreationException;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -54,7 +55,8 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
             };
             provider.addIncludeFilter(new AnnotationTypeFilter(Proxyable.class));
 
-            ControllerFactory factory = getControllerFactory();
+            ControllerFactory factory = getControllerFactory((DefaultListableBeanFactory) registry);
+
             // Scan all packages
             for (String basePackage : basePackages) {
                 for (BeanDefinition beanDefinition : provider.findCandidateComponents(basePackage)) {
@@ -72,14 +74,21 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
         }
     }
 
-    private ControllerFactory getControllerFactory() {
+    /**
+     * Gets controller factory instance to create Proxy for found controllers
+     * @param beanFactory bean factory to get beans
+     * @return controller factory
+     */
+    private ControllerFactory getControllerFactory(DefaultListableBeanFactory beanFactory) {
         ControllerFactory factory = new ControllerFactory();
-        PropertiesControllerURLResolver urlResolver = new PropertiesControllerURLResolver();
-        urlResolver.setEnvironment(environment);
+        ControllerURLResolver urlResolver = beanFactory.getBean(ControllerURLResolver.class);
+        beanFactory.initializeBean(urlResolver, ControllerURLResolver.class.getCanonicalName());
+        beanFactory.autowireBeanProperties(urlResolver, AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, true);
         factory.setControllerURLResolver(urlResolver);
 
         return factory;
     }
+
     /**
      * Checks whether the interface has implementing class
      *

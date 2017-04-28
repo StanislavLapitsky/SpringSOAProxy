@@ -1,13 +1,8 @@
 package org.proxysoa.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.*;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The resolver is based on .properties available for application.
@@ -25,6 +20,7 @@ public class PropertiesControllerURLResolver implements ControllerURLResolver {
     public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
+
     @Override
     public String getServiceURL(Class<?> controllerClass) {
         Object value = environment.getProperty(controllerClass.getCanonicalName());
