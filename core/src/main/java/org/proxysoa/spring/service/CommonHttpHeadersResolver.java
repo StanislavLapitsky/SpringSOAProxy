@@ -4,6 +4,7 @@ import org.springframework.util.MultiValueMap;
 
 /**
  * A simple implemnetation which returns static headers map the same for all controllers
+ *
  * @author stanislav.lapitsky created 4/28/2017.
  */
 public class CommonHttpHeadersResolver implements HttpHeadersResolver {
@@ -12,6 +13,7 @@ public class CommonHttpHeadersResolver implements HttpHeadersResolver {
 
     /**
      * Default constructor
+     *
      * @param commonMap headers common map
      */
     public CommonHttpHeadersResolver(MultiValueMap<String, String> commonMap) {

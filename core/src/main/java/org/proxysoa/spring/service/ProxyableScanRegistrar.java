@@ -76,6 +76,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
 
     /**
      * Gets controller factory instance to create Proxy for found controllers
+     *
      * @param beanFactory bean factory to get beans
      * @return controller factory
      */

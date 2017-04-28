@@ -9,7 +9,6 @@ import org.springframework.util.MultiValueMap;
  */
 public interface HttpHeadersResolver {
     /**
-     *
      * @param controllerClass controller class (interface)
      * @return headers to be used on remote call of the controller
      */

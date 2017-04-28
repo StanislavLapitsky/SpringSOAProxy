@@ -23,9 +23,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//import io.swagger.annotations.ApiImplicitParam;
-//import io.swagger.annotations.ApiImplicitParams;
-
 /**
  * Wraps Controller and keeps all the remote  REST calls related logic,
  * marshall parameters, remote calls, unmarshall results.
@@ -47,6 +44,7 @@ public class RestCallHandler implements InvocationHandler {
     private HttpHeadersResolver httpHeadersResolver;
 
     private Class<?> controllerClass;
+
     /**
      * Constructs invocation info for specified controller interface.
      * Iterates methods storing call info
@@ -173,11 +171,10 @@ public class RestCallHandler implements InvocationHandler {
         //if headers resolver is specified use it to get headers
         if (httpHeadersResolver != null) {
             MultiValueMap<String, String> headers = httpHeadersResolver.getHeaders(controllerClass);
-            for (Map.Entry<String, List<String>> e: headers.entrySet()) {
+            for (Map.Entry<String, List<String>> e : headers.entrySet()) {
                 requestHeaders.put(e.getKey(), e.getValue());
             }
-        }
-        else {
+        } else {
             //default accept header when no resolver is found
             requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
         }
