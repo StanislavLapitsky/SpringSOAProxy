@@ -32,7 +32,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
-        // Get the MyInterfaceScan annotation attributes
+        // Get the ProxyableScan annotation attributes
         Map<String, Object> annotationAttributes = metadata.getAnnotationAttributes(ProxyableScan.class.getCanonicalName());
 
         if (annotationAttributes != null) {
@@ -43,7 +43,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
                 basePackages = new String[]{((StandardAnnotationMetadata) metadata).getIntrospectedClass().getPackage().getName()};
             }
 
-            // using these packages, scan for interface annotated with MyCustomBean
+            // using these packages, scan for interface annotated with Proxyable
             ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false, environment) {
                 // Override isCandidateComponent to only scan for interface
                 @Override
@@ -54,14 +54,14 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
             };
             provider.addIncludeFilter(new AnnotationTypeFilter(Proxyable.class));
 
-            ControllerFactory factory = new ControllerFactory();
+            ControllerFactory factory = getControllerFactory();
             // Scan all packages
             for (String basePackage : basePackages) {
                 for (BeanDefinition beanDefinition : provider.findCandidateComponents(basePackage)) {
                     try {
                         Class c = this.getClass().getClassLoader().loadClass(beanDefinition.getBeanClassName());
                         if (!hasImplementingClass(c, basePackages)) {
-                            Object instance = factory.createProxy(c, getUrlByClassName(beanDefinition.getBeanClassName()));
+                            Object instance = factory.getOrCreateProxy(c);
                             ((DefaultListableBeanFactory) registry).registerSingleton(beanDefinition.getBeanClassName(), instance);
                         }
                     } catch (ClassNotFoundException e) {
@@ -72,6 +72,14 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
         }
     }
 
+    private ControllerFactory getControllerFactory() {
+        ControllerFactory factory = new ControllerFactory();
+        PropertiesControllerURLResolver urlResolver = new PropertiesControllerURLResolver();
+        urlResolver.setEnvironment(environment);
+        factory.setControllerURLResolver(urlResolver);
+
+        return factory;
+    }
     /**
      * Checks whether the interface has implementing class
      *
@@ -90,7 +98,4 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
         return false;
     }
 
-    private String getUrlByClassName(String className) {
-        return environment.getProperty(className);
-    }
 }

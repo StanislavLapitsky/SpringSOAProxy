@@ -18,69 +18,16 @@ import java.util.Map;
  */
 @Component
 public class PropertiesControllerURLResolver implements ControllerURLResolver {
+
+    private Environment environment;
+
     @Autowired
-    private Environment env;
-
-    private Map<String, Object> allPropertiesMap;
-
-    /**
-     * Gets all properties for environment iterating all available property sources
-     *
-     * @param env environment
-     * @return properties key/value map
-     */
-    private static Map<String, Object> getAllProperties(ConfigurableEnvironment env) {
-        Map<String, Object> target = new HashMap<>();
-        env.getPropertySources().forEach(ps -> addAll(target, getAllProperties(ps)));
-        return target;
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
-
-    /**
-     * Gets all properties for property sources
-     *
-     * @param source property source
-     * @return properties key/value map
-     */
-    private static Map<String, Object> getAllProperties(PropertySource<?> source) {
-        Map<String, Object> result = new HashMap<>();
-
-        if (source instanceof CompositePropertySource) {
-            CompositePropertySource cps = (CompositePropertySource) source;
-            cps.getPropertySources().forEach(ps -> addAll(result, getAllProperties(ps)));
-            return result;
-        }
-
-        if (source instanceof EnumerablePropertySource<?>) {
-            EnumerablePropertySource<?> ps = (EnumerablePropertySource<?>) source;
-            Arrays.asList(ps.getPropertyNames()).forEach(key -> result.put(key, ps.getProperty(key)));
-            return result;
-        }
-
-        return result;
-
-    }
-
-    private static void addAll(Map<String, Object> target, Map<String, Object> toAdd) {
-        for (Map.Entry<String, Object> entry : toAdd.entrySet()) {
-            if (target.containsKey(entry.getKey())) {
-                continue;
-            }
-
-            target.put(entry.getKey(), entry.getValue());
-        }
-    }
-
-    /**
-     * Read all available properties and store them in a map
-     */
-    @PostConstruct
-    private void init() {
-        allPropertiesMap = getAllProperties((ConfigurableEnvironment) env);
-    }
-
     @Override
     public String getServiceURL(Class<?> controllerClass) {
-        Object value = allPropertiesMap.get(controllerClass.getCanonicalName());
+        Object value = environment.getProperty(controllerClass.getCanonicalName());
         return value != null ? "" + value : null;
     }
 }

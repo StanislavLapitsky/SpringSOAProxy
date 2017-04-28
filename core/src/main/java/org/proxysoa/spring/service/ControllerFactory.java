@@ -27,9 +27,8 @@ import java.util.Map;
 @Component
 public class ControllerFactory {
 
-    @Autowired
     private ApplicationContext applicationContext;
-    @Autowired
+
     private ControllerURLResolver controllerURLResolver;
 
     //kind of cache which keeps proxy references by class name to avoid permanent Proxy creation
@@ -39,6 +38,15 @@ public class ControllerFactory {
     @Value("${SOA.ControllerFactory.enforceProxyCreation:false}")
     private boolean enforceProxyCreation;
 
+    @Autowired
+    public void setControllerURLResolver(ControllerURLResolver controllerURLResolver) {
+        this.controllerURLResolver = controllerURLResolver;
+    }
+
+    @Autowired
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
     /**
      * Gets local controller bean (if exists) or creates proxy for the controller remote calls
      *
@@ -50,7 +58,7 @@ public class ControllerFactory {
         if (applicationContext != null) {
             Map<String, ? extends T> beansMap = applicationContext.getBeansOfType(controllerInterface);
             if (enforceProxyCreation || beansMap.size() == 0) {
-                return getOrCreateProxy(controllerInterface, controllerURLResolver.getServiceURL(controllerInterface));
+                return getOrCreateProxy(controllerInterface);
             } else if (beansMap.size() > 1) {
                 throw new SOAControllerCreationException("Expecting single instance of bean for class "
                         + controllerInterface + " found " + beansMap.size());
@@ -72,7 +80,8 @@ public class ControllerFactory {
      * @return proxy for the controller
      */
     @SuppressWarnings("unchecked")
-    public <T> T getOrCreateProxy(Class<T> controllerInterface, String controllerUrl) {
+    public <T> T getOrCreateProxy(Class<T> controllerInterface) {
+        String controllerUrl = controllerURLResolver.getServiceURL(controllerInterface);
         if (controllerUrl == null) {
             throw new SOAControllerCreationException("Cannot resolve URL for " + controllerInterface.getCanonicalName());
         }
