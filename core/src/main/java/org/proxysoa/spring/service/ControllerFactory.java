@@ -72,21 +72,28 @@ public class ControllerFactory {
      * @return proxy for the controller
      */
     @SuppressWarnings("unchecked")
-    private <T> T getOrCreateProxy(Class<T> controllerInterface, String controllerUrl) {
+    public <T> T getOrCreateProxy(Class<T> controllerInterface, String controllerUrl) {
         if (controllerUrl == null) {
             throw new SOAControllerCreationException("Cannot resolve URL for " + controllerInterface.getCanonicalName());
         }
         T controller = (T) controllersMap.get(controllerInterface.getCanonicalName());
         if (controller == null) {
-            RestCallHandler restCallHandler = new RestCallHandler(controllerInterface, controllerUrl);
-            T proxy = (T) Proxy.newProxyInstance(
-                    controllerInterface.getClassLoader(),
-                    new Class[]{controllerInterface},
-                    restCallHandler);
-            controllersMap.put(controllerInterface.getCanonicalName(), proxy);
-            controller = proxy;
+            controller = createProxy(controllerInterface, controllerUrl);
         }
 
+        return controller;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T createProxy(Class<T> controllerInterface, String controllerUrl) {
+        T controller;
+        RestCallHandler restCallHandler = new RestCallHandler(controllerInterface, controllerUrl);
+        T proxy = (T) Proxy.newProxyInstance(
+                controllerInterface.getClassLoader(),
+                new Class[]{controllerInterface},
+                restCallHandler);
+        controllersMap.put(controllerInterface.getCanonicalName(), proxy);
+        controller = proxy;
         return controller;
     }
 

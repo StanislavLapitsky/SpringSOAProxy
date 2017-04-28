@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.proxysoa.spring.controller.ParametersConverterTestController;
-import org.proxysoa.spring.controller.UserController;
 import org.proxysoa.spring.dto.PojoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

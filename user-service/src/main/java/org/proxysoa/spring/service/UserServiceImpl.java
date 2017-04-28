@@ -21,6 +21,8 @@ public class UserServiceImpl implements UserService {
     private static List<UserDTO> dummyUsers = getDummyUsers();
     @Autowired
     private ControllerFactory controllerFactory;
+    @Autowired
+    private ProjectController projectController;
 
     private static List<UserDTO> getDummyUsers() {
         List<UserDTO> users = new ArrayList<>();
@@ -51,10 +53,21 @@ public class UserServiceImpl implements UserService {
 
         List<UserDTO> projectUsers = dummyUsers.subList(startIndex, endIndex);
         for (UserDTO user : projectUsers) {
-            user.setProjects(getUserProjects(user));
+            user.setProjects(getUserProjectsFromAutowired(user));
+            // the commented method uses ControllerFactory directly to get controller
+            // could be used as example if necessary
+            // user.setProjects(getUserProjects(user));
         }
 
         return new SimplePage<>(projectUsers);
+    }
+
+    private List<ProjectDTO> getUserProjectsFromAutowired(UserDTO u) {
+        try {
+            return projectController.getProjectsByUser(u.getId());
+        } catch (ResourceAccessException | SOAControllerInvocationException e) {
+            return null;
+        }
     }
 
     private List<ProjectDTO> getUserProjects(UserDTO u) {

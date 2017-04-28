@@ -13,6 +13,7 @@ import java.util.Map;
  * The resolver is based on .properties available for application.
  * The canonical class name of Controller interface is used as a key
  * The value must be remote URL
+ *
  * @author stanislav.lapitsky created 4/20/2017.
  */
 @Component
@@ -23,15 +24,8 @@ public class PropertiesControllerURLResolver implements ControllerURLResolver {
     private Map<String, Object> allPropertiesMap;
 
     /**
-     * Read all available properties and store them in a map
-     */
-    @PostConstruct
-    private void init() {
-        allPropertiesMap = getAllProperties((ConfigurableEnvironment) env);
-    }
-
-    /**
      * Gets all properties for environment iterating all available property sources
+     *
      * @param env environment
      * @return properties key/value map
      */
@@ -43,6 +37,7 @@ public class PropertiesControllerURLResolver implements ControllerURLResolver {
 
     /**
      * Gets all properties for property sources
+     *
      * @param source property source
      * @return properties key/value map
      */
@@ -75,9 +70,17 @@ public class PropertiesControllerURLResolver implements ControllerURLResolver {
         }
     }
 
+    /**
+     * Read all available properties and store them in a map
+     */
+    @PostConstruct
+    private void init() {
+        allPropertiesMap = getAllProperties((ConfigurableEnvironment) env);
+    }
+
     @Override
     public String getServiceURL(Class<?> controllerClass) {
         Object value = allPropertiesMap.get(controllerClass.getCanonicalName());
-        return value!=null ? "" + value : null;
+        return value != null ? "" + value : null;
     }
 }

@@ -3,9 +3,6 @@ package org.proxysoa.spring.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.proxysoa.spring.ServicesIntegrationMainApp;
-import org.proxysoa.spring.dto.SimplePage;
-import org.proxysoa.spring.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
@@ -48,7 +45,7 @@ public class TestAutowireControllerImplTest {
                 new ParameterizedTypeReference<String>() {
                 });
 
-        assertTrue(response.getBody().length()>0);
+        assertTrue(response.getBody().length() > 0);
     }
 
 }

@@ -1,15 +1,7 @@
 package org.proxysoa.spring.config;
 
-import org.proxysoa.spring.controller.ProjectController;
-import org.proxysoa.spring.controller.UserController;
-import org.proxysoa.spring.service.ControllerURLResolver;
-import org.proxysoa.spring.service.MapControllerUrlResolver;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Simplest URL resolver for remote calls for each controller.
