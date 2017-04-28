@@ -44,6 +44,9 @@ public class RestCallHandler implements InvocationHandler {
     //key is method name, value is invocation info - request mapping, method etc.
     private Map<String, InvocationInfo> methodInvocationMap = new HashMap<>();
 
+    private HttpHeadersResolver httpHeadersResolver;
+
+    private Class<?> controllerClass;
     /**
      * Constructs invocation info for specified controller interface.
      * Iterates methods storing call info
@@ -52,7 +55,9 @@ public class RestCallHandler implements InvocationHandler {
      * @param controllerUrl   URL of the remote REST web service to be called
      */
     @SuppressWarnings("unchecked")
-    public RestCallHandler(Class<?> controllerClass, String controllerUrl) {
+    public RestCallHandler(Class<?> controllerClass, String controllerUrl, HttpHeadersResolver httpHeadersResolver) {
+        this.controllerClass = controllerClass;
+        this.httpHeadersResolver = httpHeadersResolver;
         String classMapping = getClassRequestMapping(controllerClass);
         for (Method m : ReflectionUtils.getAllMethods(controllerClass)) {
             storeMethodInfo(m, classMapping, controllerUrl);
@@ -165,7 +170,18 @@ public class RestCallHandler implements InvocationHandler {
      */
     private HttpEntity<?> getHttpEntity(Object[] args, InvocationInfo info, UriComponentsBuilder builder) {
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
+        //if headers resolver is specified use it to get headers
+        if (httpHeadersResolver != null) {
+            MultiValueMap<String, String> headers = httpHeadersResolver.getHeaders(controllerClass);
+            for (Map.Entry<String, List<String>> e: headers.entrySet()) {
+                requestHeaders.put(e.getKey(), e.getValue());
+            }
+        }
+        else {
+            //default accept header when no resolver is found
+            requestHeaders.setAccept(Collections.singletonList(new MediaType("application", "json")));
+        }
+
         HttpEntity<?> requestEntity;
         if (info.httpMethod == HttpMethod.GET) {
             builder.queryParams(convertValuesToStrings(getParametersMap(info, args)));

@@ -31,6 +31,8 @@ public class ControllerFactory {
 
     private ControllerURLResolver controllerURLResolver;
 
+    private HttpHeadersResolver httpHeadersResolver;
+
     //kind of cache which keeps proxy references by class name to avoid permanent Proxy creation
     private Map<String, Object> controllersMap = new HashMap<>();
 
@@ -41,6 +43,11 @@ public class ControllerFactory {
     @Autowired
     public void setControllerURLResolver(ControllerURLResolver controllerURLResolver) {
         this.controllerURLResolver = controllerURLResolver;
+    }
+
+    @Autowired(required = false)
+    public void setHttpHeadersResolver(HttpHeadersResolver httpHeadersResolver) {
+        this.httpHeadersResolver = httpHeadersResolver;
     }
 
     @Autowired
@@ -97,7 +104,7 @@ public class ControllerFactory {
     @SuppressWarnings("unchecked")
     public <T> T createProxy(Class<T> controllerInterface, String controllerUrl) {
         T controller;
-        RestCallHandler restCallHandler = new RestCallHandler(controllerInterface, controllerUrl);
+        RestCallHandler restCallHandler = new RestCallHandler(controllerInterface, controllerUrl, httpHeadersResolver);
         T proxy = (T) Proxy.newProxyInstance(
                 controllerInterface.getClassLoader(),
                 new Class[]{controllerInterface},

@@ -8,7 +8,7 @@ import org.proxysoa.spring.controller.TestController;
  * @author stanislav.lapitsky created 4/18/2017.
  */
 public class RestCallHandlerTest {
-    private RestCallHandler restCallHandler = new RestCallHandler(TestController.class, "");
+    private RestCallHandler restCallHandler = new RestCallHandler(TestController.class, "", null);
 
     @Test
     public void testClassRequestMapping() {
