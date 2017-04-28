@@ -72,3 +72,21 @@ is necessary to add @ProxyableScan annotation to your SpringBootApplication
 public class Service1WebApplication {
 ...
 }
+```
+
+By default just simple http header "Accept" -> "application/json" is added on the remote 
+calls. To override the behavior with custom http headers set a custom bean implementing
+HttpHeadersResolver interface must be added. For example add the code to be added to 
+*@Configuration* annotated class:
+```
+    @Bean
+    public HttpHeadersResolver httpHeadersResolver() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("Accept","application/json");
+        //... more headers here ...
+        CommonHttpHeadersResolver resolver = new CommonHttpHeadersResolver(map);
+
+        return resolver;
+    }
+```
+The resolver can provide set of headers specific for each Controller's remote calls.
