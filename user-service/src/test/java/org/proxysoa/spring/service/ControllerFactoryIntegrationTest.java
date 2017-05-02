@@ -29,19 +29,9 @@ public class ControllerFactoryIntegrationTest {
     @LocalServerPort
     private int port;
 
-    @Value("${server.contextPath}")
-    private String contextPath;
-    private String base;
-
-    @Autowired
-    private TestRestTemplate template;
     @Autowired
     private ControllerFactory controllerFactory;
 
-    @Before
-    public void setUp() throws Exception {
-        this.base = "http://localhost:" + port;
-    }
 
     @Test
     public void controllerFactoryTestLocalController() throws Exception {

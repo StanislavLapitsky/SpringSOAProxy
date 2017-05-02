@@ -4,6 +4,8 @@ import org.proxysoa.spring.annotation.Proxyable;
 import org.proxysoa.spring.annotation.ProxyableScan;
 import org.proxysoa.spring.exception.SOAControllerCreationException;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -24,6 +26,8 @@ import java.util.Set;
  * @author stanislav.lapitsky created 4/27/2017.
  */
 public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, EnvironmentAware {
+    private static final Logger LOG = LoggerFactory.getLogger(ProxyableScanRegistrar.class);
+
     private Environment environment;
 
     @Override
@@ -33,6 +37,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+        LOG.debug("Registering @Proxyable beans");
         // Get the ProxyableScan annotation attributes
         Map<String, Object> annotationAttributes = metadata.getAnnotationAttributes(ProxyableScan.class.getCanonicalName());
 
@@ -65,6 +70,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
                         if (!hasImplementingClass(c, basePackages)) {
                             Object instance = factory.getOrCreateProxy(c);
                             ((DefaultListableBeanFactory) registry).registerSingleton(beanDefinition.getBeanClassName(), instance);
+                            LOG.debug("Registered proxy for {}", c.getCanonicalName());
                         }
                     } catch (ClassNotFoundException e) {
                         throw new SOAControllerCreationException("cannot create proxy for " + beanDefinition.getBeanClassName());
@@ -81,6 +87,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
      * @return controller factory
      */
     private ControllerFactory getControllerFactory(DefaultListableBeanFactory beanFactory) {
+        LOG.debug("Creating ControllerFactory to register proxy controllers");
         ControllerFactory factory = new ControllerFactory();
         ControllerURLResolver urlResolver = beanFactory.getBean(ControllerURLResolver.class);
         beanFactory.initializeBean(urlResolver, ControllerURLResolver.class.getCanonicalName());

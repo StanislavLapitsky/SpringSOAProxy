@@ -1,6 +1,8 @@
 package org.proxysoa.spring.service;
 
 import org.proxysoa.spring.exception.SOAControllerCreationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +28,7 @@ import java.util.Map;
  */
 @Component
 public class ControllerFactory {
+    private static final Logger LOG = LoggerFactory.getLogger(ControllerFactory.class);
 
     private ApplicationContext applicationContext;
 
@@ -103,6 +106,7 @@ public class ControllerFactory {
 
     @SuppressWarnings("unchecked")
     public <T> T createProxy(Class<T> controllerInterface, String controllerUrl) {
+        LOG.debug("Create proxy for controller {} for URL {}", controllerInterface.getCanonicalName(), controllerUrl);
         T controller;
         RestCallHandler restCallHandler = new RestCallHandler(controllerInterface, controllerUrl, httpHeadersResolver);
         T proxy = (T) Proxy.newProxyInstance(

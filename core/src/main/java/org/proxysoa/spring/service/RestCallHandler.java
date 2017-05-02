@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.proxysoa.spring.exception.SOAControllerInvocationException;
 import org.reflections.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -11,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -37,6 +40,7 @@ import java.util.stream.Collectors;
  * @author stanislav.lapitsky created 4/14/2017.
  */
 public class RestCallHandler implements InvocationHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(RestCallHandler.class);
 
     //key is method name, value is invocation info - request mapping, method etc.
     private Map<String, InvocationInfo> methodInvocationMap = new HashMap<>();
@@ -73,7 +77,10 @@ public class RestCallHandler implements InvocationHandler {
         Set<Annotation> annotations = ReflectionUtils.getAllAnnotations(controllerClass);
         for (Annotation a : annotations) {
             if (a instanceof RequestMapping) {
-                return ((RequestMapping) a).value()[0]; //TODO what if it has more than one value?
+                if (((RequestMapping) a).value().length > 1) {
+                    LOG.warn("More than one request mapping found for {}", controllerClass.getCanonicalName());
+                }
+                return ((RequestMapping) a).value()[0];
             }
         }
         return "";
@@ -94,13 +101,17 @@ public class RestCallHandler implements InvocationHandler {
         List<RequestParam> variables = getRequestParams(m);
         for (Annotation a : annotations) {
             if (a instanceof RequestMapping) {
-                methodRequestMapping.append(((RequestMapping) a).value()[0]); //TODO what if it has more than one ?
+                if (((RequestMapping) a).value().length > 1) {
+                    LOG.warn("More than one request mapping found for {}", controllerClass.getCanonicalName());
+                }
+                methodRequestMapping.append(((RequestMapping) a).value()[0]);
                 httpMethod = HttpMethod.valueOf(((RequestMapping) a).method()[0].name());
             }
         }
 
         InvocationInfo info = new InvocationInfo(controllerUrl, methodRequestMapping.toString(), httpMethod, variables);
         methodInvocationMap.put(m.getDeclaringClass().getCanonicalName() + ":" + m.getName(), info);
+        LOG.debug("InvocationInfo is registered {}", info);
     }
 
     private List<RequestParam> getRequestParams(Method m) {
@@ -126,6 +137,10 @@ public class RestCallHandler implements InvocationHandler {
      * @throws Throwable throws invocation exceptions
      */
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        LOG.debug("Invoke method {} of {} with args {}",
+                method.getName(),
+                method.getDeclaringClass().getCanonicalName(),
+                Arrays.deepToString(args));
         InvocationInfo info = methodInvocationMap.get(method.getDeclaringClass().getCanonicalName() +
                 ":" + method.getName());
         if (info == null) {
@@ -140,19 +155,24 @@ public class RestCallHandler implements InvocationHandler {
 
         ResponseEntity response;
         Type type = method.getGenericReturnType();
-        if (type instanceof ParameterizedType) {
-            Assert.isInstanceOf(ParameterizedType.class, type);
-            ParameterizedType parameterizedType = (ParameterizedType) type;
+        try {
+            if (type instanceof ParameterizedType) {
+                Assert.isInstanceOf(ParameterizedType.class, type);
+                ParameterizedType parameterizedType = (ParameterizedType) type;
 
-            response = restTemplate.exchange(builder.build().encode().toUri(),
-                    info.httpMethod,
-                    requestEntity,
-                    new DeserializeParameterizedTypeReference(parameterizedType));
-        } else {
-            response = restTemplate.exchange(builder.build().encode().toUri(),
-                    info.httpMethod,
-                    requestEntity,
-                    method.getReturnType());
+                response = restTemplate.exchange(builder.build().encode().toUri(),
+                        info.httpMethod,
+                        requestEntity,
+                        new DeserializeParameterizedTypeReference(parameterizedType));
+            } else {
+                response = restTemplate.exchange(builder.build().encode().toUri(),
+                        info.httpMethod,
+                        requestEntity,
+                        method.getReturnType());
+            }
+        } catch (RestClientException e) {
+            throw new SOAControllerInvocationException("Error calling remote service URL "
+                    + builder.build().encode().toUri(), e);
         }
         return response.getBody();
     }
@@ -353,6 +373,17 @@ public class RestCallHandler implements InvocationHandler {
             this.requestMapping = requestMapping;
             this.httpMethod = httpMethod;
             this.parameters = parameters;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("InvocationInfo{");
+            sb.append("requestMapping='").append(requestMapping).append('\'');
+            sb.append(", httpMethod=").append(httpMethod);
+            sb.append(", serviceUrl='").append(serviceUrl).append('\'');
+            sb.append(", parameters=").append(parameters);
+            sb.append('}');
+            return sb.toString();
         }
     }
 
