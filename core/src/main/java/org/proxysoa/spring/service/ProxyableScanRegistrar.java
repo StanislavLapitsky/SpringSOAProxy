@@ -36,6 +36,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         LOG.debug("Registering @Proxyable beans");
         // Get the ProxyableScan annotation attributes
@@ -104,6 +105,7 @@ public class ProxyableScanRegistrar implements ImportBeanDefinitionRegistrar, En
      * @param basePackages       packages to scan
      * @return true if there is a class implementing the interface
      */
+    @SuppressWarnings("unchecked")
     private boolean hasImplementingClass(Class proxyableInterface, String[] basePackages) {
         for (String pName : basePackages) {
             Reflections reflections = new Reflections(pName);
